@@ -51,13 +51,14 @@ function getWeather(city){
   weatherResult.innerHTML= "<p>Loading Weather Data!...</p>";
   forecastSection.innerHTML= "";
 
-  //Current weather
+  //Fetching current weather
   fetch(weatherURL)
   .then(function(response){
     return response.json();
   })
   .then(function(data){
     if (data.cod=== 200){
+      // Displaying weather info
       weatherResult.innerHTML= "<h2 class='text-2xl font-semibold'>"+ data.name + ", "+ data.sys.country+ "</h2>"+
       "<p>"+ data.weather[0].main+ "-" + data.weather[0].description+ "</p>"+
       "<p> \uD83C\uDF21 Temp: "+ data.main.temp+ "°C</p>"+
@@ -67,18 +68,20 @@ function getWeather(city){
     }  
   });
 
-  //5-Days Forecaste
+  //Fetching 5-Days Forecaste
   fetch(forecastURL)
   .then(function(response){
     return response.json();
   })
   .then(function(forecastData){
+    // Filtering forecasts to one per day at 12PM
     const dailyForecasts= forecastData.list.filter(function(item){
       return item.dt_txt.includes("12:00:00");
     });
 
     forecastSection.innerHTML="";
 
+    // Loop through first 5 days and creating forecast cards
     for(let i= 0; i< 5 && i< dailyForecasts.length;i++){
       const day= dailyForecasts[i];
       const date= new Date(day.dt_txt);
@@ -94,6 +97,9 @@ function getWeather(city){
 }
 
 
+
+
+
 //getting weather using user's latitude and longitude.
 
 function getWeatherByCoords(lat, lon){
@@ -104,7 +110,7 @@ function getWeatherByCoords(lat, lon){
   weatherResult.innerHTML= "<p>Loading weather data...</p>";
   forecastSection.innerHTML= "";
 
-  //Getting Current Weather.
+  //Fetching Current Weather.
   fetch(weatherURL)
     .then(function(response){
     return response.json(); // Converting the response into JSON
